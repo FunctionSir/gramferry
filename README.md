@@ -2,7 +2,7 @@
  * @Author: FunctionSir
  * @License: AGPLv3
  * @Date: 2025-09-02 12:56:50
- * @LastEditTime: 2025-09-02 17:10:16
+ * @LastEditTime: 2025-09-02 17:30:28
  * @LastEditors: FunctionSir
  * @Description: -
  * @FilePath: /gramferry/README.md
@@ -14,10 +14,10 @@ Just UDP to TCP, no more chaos. Written in Go.
 
 Currently, it's an old and stupid pipe.
 
-- IPv6 is not supported (but might be support it in the future).
-- Only SINGLE user is allowed when using the UDP Port in client side currently.
-- Client side should send the first UDP packet first.
-- No auth, no compression, no anti-replay... Just no any advanced features. Your UDP server should take care of herself, and be well.
+- IPv6 is not supported (but might be supported it in the future). (Since the parser is currently really simple)
+- Only a single application can use the UDP port on the client side at a time. (It always sends packets to the application who sent the last packet to it)
+- Client side should send the first UDP packet first. (Otherwise it doesn't know who is the receiver)
+- No auth, no compression, no anti-replay... Just no any advanced features. Your UDP server should take care of herself (yes, I call my servers "she" - it's a style choice and not a grammar mistake), and be well. (In most cases, a UDP service without any protections is not safe at all, and you probably don't want to use it)
 
 But it is easy to compile and use.
 
@@ -36,4 +36,4 @@ It's usefull when you are using WireGuard and your ISP is QoSing UDP... And that
 Currrently: \[len:uint16\]\[data:bytes\]
 In the future (may be...): \[linkId:uint32\]\[len:uint16\]\[data:bytes\]
 
-How stupid it is...
+How stupid it is... But it's even more stupid some ISPs are QoSing UDP in some stupid ways...
