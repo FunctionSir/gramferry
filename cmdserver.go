@@ -2,7 +2,7 @@
  * @Author: FunctionSir
  * @License: AGPLv3
  * @Date: 2025-09-02 14:14:54
- * @LastEditTime: 2025-09-02 16:29:16
+ * @LastEditTime: 2025-09-02 17:44:19
  * @LastEditors: FunctionSir
  * @Description: -
  * @FilePath: /gramferry/cmdserver.go
@@ -13,7 +13,9 @@ package main
 import (
 	"bytes"
 	"encoding/binary"
+	"fmt"
 	"io"
+	"log"
 	"net"
 	"sync"
 	"sync/atomic"
@@ -28,6 +30,12 @@ func serverShutdown(tcpConn *net.Conn, udpConn *net.UDPConn, stopFlag *atomic.Bo
 }
 
 func cmdServer(cmd *cobra.Command, args []string) {
+	PrintBanner()
+	fmt.Println("Listening TCP:", TCP)
+	fmt.Println("Dialing UDP:", UDP)
+
+	log.Println("starting server side service...")
+
 	tcpListen, err := net.Listen("tcp", TCP)
 	if LogOnErr(err) {
 		panic(err)

@@ -2,7 +2,7 @@
  * @Author: FunctionSir
  * @License: AGPLv3
  * @Date: 2025-09-02 14:20:36
- * @LastEditTime: 2025-09-02 16:15:57
+ * @LastEditTime: 2025-09-02 17:43:57
  * @LastEditors: FunctionSir
  * @Description: -
  * @FilePath: /gramferry/shared.go
@@ -11,6 +11,7 @@
 package main
 
 import (
+	"fmt"
 	"log"
 	"net"
 	"strconv"
@@ -40,4 +41,8 @@ func ParseTCPAddr(s string) (net.TCPAddr, error) {
 		return net.TCPAddr{}, err
 	}
 	return net.TCPAddr{IP: net.ParseIP(splited[0]), Port: port, Zone: ""}, nil
+}
+
+func PrintBanner() {
+	fmt.Println("GramFerry [ Version 0.1.0 (Wannai Kinuho) ]")
 }

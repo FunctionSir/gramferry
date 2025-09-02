@@ -2,7 +2,7 @@
  * @Author: FunctionSir
  * @License: AGPLv3
  * @Date: 2025-09-02 12:56:50
- * @LastEditTime: 2025-09-02 17:34:09
+ * @LastEditTime: 2025-09-02 17:37:55
  * @LastEditors: FunctionSir
  * @Description: -
  * @FilePath: /gramferry/README.md
@@ -17,7 +17,7 @@ Currently, it's an old and stupid pipe.
 - IPv6 is not supported (but might be supported it in the future). (Since the parser is currently really simple)
 - Only a single application can use the UDP port on the client side at a time. (It always sends packets to the application who sent the last packet to it)
 - Client side should send the first UDP packet first. (Otherwise it doesn't know who is the receiver)
-- No auth, no compression, no anti-replay... Just no any advanced features. Your UDP server should take care of herself (yes, I call my servers "she" - it's a style choice, not a grammar mistake), and be well. (In most cases, a UDP service without any protections is not safe at all, and you probably don't want to use it)
+- No auth, no compression, no encryption, no anti-replay... Just no any advanced features. Your UDP server should take care of herself (yes, I call my servers "she" - it's a style choice, not a grammar mistake), and be well. (In most cases, a UDP service without any protections is not safe at all, and you probably don't want to use it)
 
 But it is easy to compile and use.
 

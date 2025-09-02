@@ -2,7 +2,7 @@
  * @Author: FunctionSir
  * @License: AGPLv3
  * @Date: 2025-09-02 14:42:24
- * @LastEditTime: 2025-09-02 16:41:27
+ * @LastEditTime: 2025-09-02 17:44:55
  * @LastEditors: FunctionSir
  * @Description: -
  * @FilePath: /gramferry/cmdclient.go
@@ -13,7 +13,9 @@ package main
 import (
 	"bytes"
 	"encoding/binary"
+	"fmt"
 	"io"
+	"log"
 	"net"
 	"time"
 
@@ -23,6 +25,12 @@ import (
 var Remote *net.UDPAddr
 
 func cmdClient(cmd *cobra.Command, args []string) {
+	PrintBanner()
+	fmt.Println("Listening UDP:", UDP)
+	fmt.Println("Dialing TCP:", TCP)
+
+	log.Println("starting client side service...")
+
 	udpAddr, err := ParseUDPAddr(UDP)
 	if LogOnErr(err) {
 		panic(err)
