@@ -4,7 +4,7 @@
 Author: FunctionSir
 License: AGPLv3
 Date: 2025-09-03 16:13:30
-LastEditTime: 2025-09-03 16:37:53
+LastEditTime: 2025-09-03 16:54:17
 LastEditors: FunctionSir
 Description: -
 FilePath: /gramferry/makereleases.py
@@ -20,6 +20,7 @@ targets = [
     "darwin/amd64", "darwin/arm64",
     # Dragonfly #
     "dragonfly/amd64",
+    # FreeBSD #
     "freebsd/386", "freebsd/amd64", "freebsd/arm", "freebsd/arm64", "freebsd/riscv64",
     # Illumos #
     "illumos/amd64",
