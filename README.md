@@ -2,7 +2,7 @@
  * @Author: FunctionSir
  * @License: AGPLv3
  * @Date: 2025-09-02 12:56:50
- * @LastEditTime: 2025-09-03 16:01:03
+ * @LastEditTime: 2025-09-03 17:03:06
  * @LastEditors: FunctionSir
  * @Description: -
  * @FilePath: /gramferry/README.md
@@ -12,9 +12,8 @@
 
 Just UDP to TCP, no more chaos. Written in Go.
 
-Currently, it's an old and stupid pipe.
+Currently, it's an stupid pipe.
 
-- IPv6 is not supported (but might be supported it in the future). (Since the parser is currently really simple)
 - Client side should send the first UDP packet first. (Otherwise it doesn't know who is the receiver)
 - No auth, no compression, no encryption, no anti-replay... Just no any advanced features. Your UDP server should take care of herself (yes, I call my servers "she" - it's a style choice, not a grammar mistake), and be well. (In most cases, a UDP service without any protections is not safe at all, and you probably don't want to use it)
 - Currently, it she will not clean the TCP connections automatically. (Might add this feature in the future)
