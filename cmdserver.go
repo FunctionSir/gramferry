@@ -2,7 +2,7 @@
  * @Author: FunctionSir
  * @License: AGPLv3
  * @Date: 2025-09-02 14:14:54
- * @LastEditTime: 2025-09-02 17:44:19
+ * @LastEditTime: 2025-09-03 15:43:54
  * @LastEditors: FunctionSir
  * @Description: -
  * @FilePath: /gramferry/cmdserver.go
@@ -41,6 +41,11 @@ func cmdServer(cmd *cobra.Command, args []string) {
 		panic(err)
 	}
 
+	udpAddr, err := net.ResolveUDPAddr("udp", UDP)
+	if LogOnErr(err) {
+		panic(err)
+	}
+
 	for {
 
 		TCPConn, err := tcpListen.Accept()
@@ -48,12 +53,7 @@ func cmdServer(cmd *cobra.Command, args []string) {
 			continue
 		}
 
-		udpAddr, err := ParseUDPAddr(UDP)
-		if LogOnErr(err) {
-			panic(err)
-		}
-
-		UDPConn, err := net.DialUDP("udp", nil, &udpAddr)
+		UDPConn, err := net.DialUDP("udp", nil, udpAddr)
 		if LogOnErr(err) {
 			continue
 		}
@@ -63,39 +63,39 @@ func cmdServer(cmd *cobra.Command, args []string) {
 
 		var once sync.Once
 
-		go func() {
+		go func(TCPConn net.Conn, UDPConn *net.UDPConn, stop *atomic.Bool) {
 			for !stop.Load() {
 				szBuf := make([]byte, 2)
 				if _, err := io.ReadFull(TCPConn, szBuf); LogOnErr(err) {
-					once.Do(func() { serverShutdown(&TCPConn, UDPConn, &stop) })
+					once.Do(func() { serverShutdown(&TCPConn, UDPConn, stop) })
 					return
 				}
 
 				var szUint uint16
 				if err := binary.Read(bytes.NewReader(szBuf), binary.BigEndian, &szUint); LogOnErr(err) {
-					once.Do(func() { serverShutdown(&TCPConn, UDPConn, &stop) })
+					once.Do(func() { serverShutdown(&TCPConn, UDPConn, stop) })
 					return
 				}
 
 				buf := make([]byte, szUint)
 				if _, err := io.ReadFull(TCPConn, buf); LogOnErr(err) {
-					once.Do(func() { serverShutdown(&TCPConn, UDPConn, &stop) })
+					once.Do(func() { serverShutdown(&TCPConn, UDPConn, stop) })
 					return
 				}
 
 				if _, err := UDPConn.Write(buf); LogOnErr(err) {
-					once.Do(func() { serverShutdown(&TCPConn, UDPConn, &stop) })
+					once.Do(func() { serverShutdown(&TCPConn, UDPConn, stop) })
 					return
 				}
 			}
-		}()
+		}(TCPConn, UDPConn, &stop)
 
-		go func() {
+		go func(TCPConn net.Conn, UDPConn *net.UDPConn, stop *atomic.Bool) {
 			for !stop.Load() {
 				buf := make([]byte, 65535)
 				n, err := UDPConn.Read(buf)
 				if LogOnErr(err) {
-					once.Do(func() { serverShutdown(&TCPConn, UDPConn, &stop) })
+					once.Do(func() { serverShutdown(&TCPConn, UDPConn, stop) })
 					return
 				}
 
@@ -103,18 +103,18 @@ func cmdServer(cmd *cobra.Command, args []string) {
 
 				err = binary.Write(toTCP, binary.BigEndian, uint16(n))
 				if LogOnErr(err) {
-					once.Do(func() { serverShutdown(&TCPConn, UDPConn, &stop) })
+					once.Do(func() { serverShutdown(&TCPConn, UDPConn, stop) })
 					return
 				}
 
 				toTCP.Write(buf[:n])
 
 				if _, err = TCPConn.Write(toTCP.Bytes()); LogOnErr(err) {
-					once.Do(func() { serverShutdown(&TCPConn, UDPConn, &stop) })
+					once.Do(func() { serverShutdown(&TCPConn, UDPConn, stop) })
 					return
 				}
 			}
-		}()
+		}(TCPConn, UDPConn, &stop)
 
 	}
 }
