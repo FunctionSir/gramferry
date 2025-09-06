@@ -2,7 +2,7 @@
  * @Author: FunctionSir
  * @License: AGPLv3
  * @Date: 2025-09-02 12:56:50
- * @LastEditTime: 2025-09-06 11:16:02
+ * @LastEditTime: 2025-09-06 11:22:58
  * @LastEditors: FunctionSir
  * @Description: -
  * @FilePath: /gramferry/README.md
@@ -32,6 +32,7 @@ It's useful when you are using WireGuard and your ISP is QoSing UDP... And that'
 ## What's new
 
 - Supported IPv6.
+- Added pprof flag for performance analyzing and debugging.
 - Now a scanner gorutine will scan the connections pool every 60s, and close connections not used over 300s.
 
 ## Protocol
