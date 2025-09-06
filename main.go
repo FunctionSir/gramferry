@@ -1,3 +1,13 @@
+/*
+ * @Author: FunctionSir
+ * @License: AGPLv3
+ * @Date: 2025-09-02 13:31:00
+ * @LastEditTime: 2025-09-04 10:05:15
+ * @LastEditors: FunctionSir
+ * @Description: -
+ * @FilePath: /gramferry/main.go
+ */
+
 package main
 
 import (
@@ -5,6 +15,8 @@ import (
 	"strings"
 
 	_ "embed"
+	"net/http"
+	_ "net/http/pprof"
 
 	"github.com/spf13/cobra"
 )
@@ -14,12 +26,27 @@ var RootDesc string
 
 var UDP, TCP string
 
+var Pprof string
+
+func startPprofIfNeeded(cmd *cobra.Command, args []string) {
+	go func() {
+		if Pprof != "" {
+			err := http.ListenAndServe(Pprof, nil)
+			if LogOnErr(err) {
+				panic(err)
+			}
+		}
+	}()
+}
+
 func main() {
 	var rootCmd = &cobra.Command{
-		Use:   "gf",
-		Short: "Gram Ferry",
-		Long:  strings.TrimSpace(RootDesc),
+		Use:              "gf",
+		Short:            "Gram Ferry",
+		Long:             strings.TrimSpace(RootDesc),
+		PersistentPreRun: startPprofIfNeeded,
 	}
+	rootCmd.PersistentFlags().StringVarP(&Pprof, "pprof", "p", "", "Serve pprof")
 
 	var serverCmd = &cobra.Command{
 		Use:   "server",
